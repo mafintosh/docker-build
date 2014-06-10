@@ -9,7 +9,7 @@ var Build = function(remote, opts) {
   if (!(this instanceof Build)) return new Build(remote, opts)
   stream.Duplex.call(this)
 
-  if (arguments.length === 1 && typeof remote === 'object') {
+  if (typeof remote === 'object' && !opts) {
     opts = remote
     remote = null
   }
