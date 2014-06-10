@@ -6,6 +6,8 @@ Docker build as a duplex stream. Pipe in a tar stream and pipe out the build out
 npm install docker-build
 ```
 
+![build status](http://img.shields.io/travis/mafintosh/docker-build.svg?style=flat)](http://travis-ci.org/mafintosh/docker-build)
+
 ## Usage
 
 ``` js
