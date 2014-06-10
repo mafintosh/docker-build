@@ -32,7 +32,10 @@ Where `remote` is a an address to docker - i.e. `localhost:2375` or `192.168.1.3
 
 ``` js
 {
-  tag: 'tag-the-image-using-this-tag'
+  tag: 'tag-the-image-using-this-tag',
+  cache: true,    // whether or not to use docker fs cache (defaults to true)
+  quiet: false,   // be quiet - defaults to false,
+  registry: conf  // add a registry config
 }
 ```
 
