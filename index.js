@@ -9,8 +9,14 @@ var Build = function(remote, opts) {
   if (!(this instanceof Build)) return new Build(remote, opts)
   stream.Duplex.call(this)
 
-  // TODO: put into module
+  if (arguments.length === 1 && typeof remote === 'object') {
+    opts = remote
+    remote = null
+  }
+
   if (!opts) opts = {}
+
+  // TODO: put into module
   if (!remote) remote = process.env.DOCKER_HOST || 'localhost:2375'
   if (remote.indexOf('://') === -1) remote = 'http://'+remote
   remote = remote.replace('://:', '://localhost:')
