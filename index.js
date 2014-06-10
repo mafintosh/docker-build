@@ -4,6 +4,7 @@ var concat = require('concat-stream')
 var stream = require('stream')
 var util = require('util')
 var querystring = require('querystring')
+var host = require('docker-host')
 
 var Build = function(remote, opts) {
   if (!(this instanceof Build)) return new Build(remote, opts)
@@ -16,13 +17,8 @@ var Build = function(remote, opts) {
 
   if (!opts) opts = {}
 
-  // TODO: put into module
-  if (!remote) remote = process.env.DOCKER_HOST || 'localhost:2375'
-  if (remote.indexOf('://') === -1) remote = 'http://'+remote
-  remote = remote.replace('://:', '://localhost:')
-
   var self = this
-  var parsed = url.parse(remote)
+  var parsed = url.parse(host(remote))
   var qs = {}
 
   if (opts.tag) qs.t = opts.tag

@@ -4,7 +4,8 @@
   "description": "docker build as a duplex stream",
   "main": "index.js",
   "dependencies": {
-    "concat-stream": "^1.4.6"
+    "concat-stream": "^1.4.6",
+    "docker-host": "^1.0.0"
   },
   "devDependencies": {
     "tape": "^2.13.2"
