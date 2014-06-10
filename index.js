@@ -5,19 +5,18 @@ var stream = require('stream')
 var util = require('util')
 var querystring = require('querystring')
 
-var Build = function(opts) {
-  if (!(this instanceof Build)) return new Build(opts)
-  if (typeof opts === 'string') opts = {remote:opts}
+var Build = function(remote, opts) {
+  if (!(this instanceof Build)) return new Build(remote, opts)
   stream.Duplex.call(this)
 
   // TODO: put into module
   if (!opts) opts = {}
-  if (!opts.remote) opts.remote = process.env.DOCKER_HOST || 'localhost:2375'
-  if (opts.remote.indexOf('://') === -1) opts.remote = 'http://'+opts.remote
-  opts.remote = opts.remote.replace('://:', '://localhost:')
+  if (!remote) remote = process.env.DOCKER_HOST || 'localhost:2375'
+  if (remote.indexOf('://') === -1) remote = 'http://'+remote
+  remote = remote.replace('://:', '://localhost:')
 
   var self = this
-  var parsed = url.parse(opts.remote)
+  var parsed = url.parse(remote)
   var qs = {}
 
   if (opts.tag) qs.t = opts.tag
