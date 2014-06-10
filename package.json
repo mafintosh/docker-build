@@ -1,0 +1,32 @@
+{
+  "name": "docker-build",
+  "version": "0.0.0",
+  "description": "docker build as a duplex stream",
+  "main": "index.js",
+  "dependencies": {
+    "concat-stream": "^1.4.6"
+  },
+  "devDependencies": {
+    "tape": "^2.13.2"
+  },
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mafintosh/docker-build"
+  },
+  "keywords": [
+    "docker",
+    "build",
+    "tar",
+    "duplex",
+    "stream"
+  ],
+  "author": "Mathias Buus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mafintosh/docker-build/issues"
+  },
+  "homepage": "https://github.com/mafintosh/docker-build"
+}

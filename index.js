@@ -1,0 +1,116 @@
+var http = require('http')
+var url = require('url')
+var concat = require('concat-stream')
+var stream = require('stream')
+var util = require('util')
+
+var Build = function(opts) {
+  if (!(this instanceof Build)) return new Build(opts)
+  if (typeof opts === 'string') opts = {remote:opts}
+  stream.Duplex.call(this)
+
+  // TODO: put into module
+  if (!opts) opts = {}
+  if (!opts.remote) opts.remote = process.env.DOCKER_HOST || 'localhost:2375'
+  if (opts.remote.indexOf('://') === -1) opts.remote = 'http://'+opts.remote
+  opts.remote = opts.remote.replace('://:', '://localhost:')
+
+  var self = this
+  var parsed = url.parse(opts.remote)
+  var qs = opts.tag ? 'tag='+encodeURIComponent(opts.tag) : ''
+
+  var request = http.request({
+    method: 'POST',
+    port: parsed.port,
+    hostname: parsed.hostname === '0.0.0.0' ? 'localhost' : parsed.hostname,
+    path: '/v1.12/build?'+qs,
+    headers: {
+      'content-type': 'application/tar'
+    }
+  })
+
+  var ondrain = function() {
+    var tmp = self._ondrain
+    self._ondrain = null
+    if (tmp) tmp()
+  }
+
+  var onerror = function(err) {
+    if (!util.isError(err)) err = new Error(err.toString())
+    self.destroy(err)
+  }
+
+  var onclose = function() {
+    self.destroy()
+  }
+
+  var onend = function() {
+    self.push(null)
+  }
+
+  var onfinish = function() {
+    request.end()
+  }
+
+  var onreadable = function() {
+    if (self._reading) self._read()
+  }
+
+  var onresponse = function(response) {
+    if (response.statusCode !== 200) return response.pipe(concat(onerror))
+
+    self._response = response
+      .on('readable', onreadable)
+      .on('end', onend)
+  }
+
+  request
+    .on('drain', ondrain)
+    .on('error', onerror)
+    .on('close', onclose)
+    .on('response', onresponse)
+
+  this._reading = false
+  this._response = null
+  this._request = request
+  this._destroyed = false
+  this._ondrain = null
+
+  this.on('finish', onfinish)
+}
+
+util.inherits(Build, stream.Duplex)
+
+Build.prototype.destroy = function(err) {
+  if (this._destroyed) return
+  this._destroyed = true
+  if (err) this.emit('error', err)
+  this._request.abort()
+  this.emit('close')
+}
+
+Build.prototype._write = function(data, enc, cb) {
+  if (this._request.write(data) !== false) return cb()
+  this._ondrain = cb
+}
+
+Build.prototype._read = function() {
+  this._reading = true
+
+  if (!this._response) return
+  var data = this._response.read()
+  if (!data) return
+
+  this._reading = false
+
+  try {
+    data = JSON.parse(data.toString())
+  } catch (err) {
+    return this.destroy(err)
+  }
+
+  if (data.error) return this.destroy(new Error(data.error))
+  this.push(data.stream)
+}
+
+module.exports = Build
