@@ -27,11 +27,12 @@ var stream = build(remote, options)
 ```
 
 Where `remote` is a an address to docker - i.e. `localhost:2375` or `192.168.1.3:2375`. Defaults to `$DOCKER_HOST` or `localhost:2375`.
+
 `options` can contain the following:
 
 ``` js
 {
-  tag: 'tag-the-image'
+  tag: 'tag-the-image-using-this-tag'
 }
 ```
 
