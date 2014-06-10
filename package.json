@@ -1,6 +1,6 @@
 {
   "name": "docker-build",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "docker build as a duplex stream",
   "main": "index.js",
   "dependencies": {
