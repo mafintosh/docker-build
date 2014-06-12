@@ -116,7 +116,7 @@ Build.prototype._read = function() {
     return this.destroy(err)
   }
 
-  if (data.error) return this.destroy(new Error(data.error))
+  if (data.error) return this.destroy(new Error(data.error.trim()))
   this.push(data.stream)
 }
 
