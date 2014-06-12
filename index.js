@@ -43,7 +43,7 @@ var Build = function(remote, opts) {
   }
 
   var onerror = function(err) {
-    if (!util.isError(err)) err = new Error(err.toString())
+    if (!util.isError(err)) err = new Error(err.toString().trim())
     self.destroy(err)
   }
 
