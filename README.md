@@ -41,6 +41,16 @@ Where `remote` is a an address to docker - i.e. `localhost:2375` or `192.168.1.3
 }
 ```
 
+## CLI
+
+There is a command line too available as well (similar to `docker build`)
+
+```
+$ npm install -g docker-build
+$ docker-build --help
+```
+
+Running `docker-build` will build current working directory
 
 ## License
 
