@@ -12,6 +12,9 @@ var argv = minimist(process.argv, {
     help: 'h',
     quiet: 'q',
     version: 'v'
+  },
+  default: {
+    cache: true
   }
 })
 
