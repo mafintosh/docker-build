@@ -5,6 +5,7 @@ var stream = require('stream')
 var util = require('util')
 var querystring = require('querystring')
 var host = require('docker-host')
+var xtend = require('xtend')
 
 var Build = function(remote, opts) {
   if (!(this instanceof Build)) return new Build(remote, opts)
@@ -18,23 +19,20 @@ var Build = function(remote, opts) {
   if (!opts) opts = {}
 
   var self = this
-  var parsed = url.parse(host(remote))
   var qs = {}
 
   if (opts.tag) qs.t = opts.tag
   if (opts.cache === false) qs.nocache = 'true'
   if (opts.quiet) qs.q = 'true'
 
-  var request = http.request({
+  var request = http.request(xtend(host(remote), {
     method: 'POST',
-    port: parsed.port,
-    hostname: parsed.hostname === '0.0.0.0' ? 'localhost' : parsed.hostname,
     path: '/v1.12/build?'+querystring.stringify(qs),
     headers: {
       'Content-Type': 'application/tar',
       'X-Registry-Config': new Buffer(JSON.stringify(opts.registry || {})+'\n').toString('base64')
     }
-  })
+  }))
 
   var ondrain = function() {
     var tmp = self._ondrain

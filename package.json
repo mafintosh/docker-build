@@ -8,10 +8,11 @@
   },
   "dependencies": {
     "concat-stream": "^1.4.6",
-    "docker-host": "^1.0.0",
+    "docker-host": "^2.0.0",
     "minimist": "^0.1.0",
     "tar-fs": "^0.3.3",
-    "tar-stream": "^0.4.2"
+    "tar-stream": "^0.4.2",
+    "xtend": "^3.0.0"
   },
   "devDependencies": {
     "tape": "^2.13.2"
