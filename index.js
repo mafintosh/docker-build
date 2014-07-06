@@ -1,4 +1,5 @@
 var http = require('http')
+var https = require('https')
 var url = require('url')
 var concat = require('concat-stream')
 var stream = require('stream')
@@ -6,6 +7,10 @@ var util = require('util')
 var querystring = require('querystring')
 var host = require('docker-host')
 var xtend = require('xtend')
+
+var req = function(opts) {
+  return ((opts.protocol === 'https:' || opts.protocol === 'https') ? https.request : http.request)(opts)
+}
 
 var Build = function(remote, opts) {
   if (!(this instanceof Build)) return new Build(remote, opts)
@@ -25,7 +30,7 @@ var Build = function(remote, opts) {
   if (opts.cache === false) qs.nocache = 'true'
   if (opts.quiet) qs.q = 'true'
 
-  var request = http.request(xtend(host(remote), {
+  var request = req(xtend(host(remote), {
     method: 'POST',
     path: '/v1.12/build?'+querystring.stringify(qs),
     headers: {
