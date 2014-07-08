@@ -8,10 +8,13 @@
   },
   "dependencies": {
     "concat-stream": "^1.4.6",
-    "docker-host": "^2.2.0",
+    "docker-host": "^2.3.1",
+    "duplexify": "^1.1.0",
+    "http-https": "^1.0.0",
     "minimist": "^0.1.0",
     "tar-fs": "^0.3.3",
     "tar-stream": "^0.4.2",
+    "through-json": "^1.0.1",
     "xtend": "^3.0.0"
   },
   "devDependencies": {

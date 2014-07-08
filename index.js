@@ -1,36 +1,20 @@
-var http = require('http')
-var https = require('https')
-var url = require('url')
-var concat = require('concat-stream')
-var stream = require('stream')
-var util = require('util')
-var querystring = require('querystring')
+var duplexify = require('duplexify')
 var host = require('docker-host')
+var concat = require('concat-stream')
+var http = require('http-https')
+var parse = require('through-json')
 var xtend = require('xtend')
+var querystring = require('querystring')
 
-var req = function(opts) {
-  return ((opts.protocol === 'https:' || opts.protocol === 'https') ? https.request : http.request)(opts)
-}
+var build = function(remote, opts) {
+  opts = opts ? xtend(host(remote), opts) : host(remote)
 
-var Build = function(remote, opts) {
-  if (!(this instanceof Build)) return new Build(remote, opts)
-  stream.Duplex.call(this)
-
-  if (typeof remote === 'object' && !opts) {
-    opts = remote
-    remote = null
-  }
-
-  if (!opts) opts = {}
-
-  var self = this
   var qs = {}
-
   if (opts.tag) qs.t = opts.tag
   if (opts.cache === false) qs.nocache = 'true'
   if (opts.quiet) qs.q = 'true'
 
-  var request = req(xtend(host(remote), {
+  var req = http.request(xtend(opts, {
     method: 'POST',
     path: '/v1.12/build?'+querystring.stringify(qs),
     headers: {
@@ -39,88 +23,27 @@ var Build = function(remote, opts) {
     }
   }))
 
-  var ondrain = function() {
-    var tmp = self._ondrain
-    self._ondrain = null
-    if (tmp) tmp()
+  var dup = duplexify(req)
+
+  var onerror = function(message) {
+    dup.destroy(new Error(message.toString().trim()))
   }
 
-  var onerror = function(err) {
-    if (!util.isError(err)) err = new Error(err.toString().trim())
-    self.destroy(err)
+  var ondata = function(data) {
+    if (!data.error) return data.stream
+    dup.destroy(new Error(data.error.trim()))
   }
 
-  var onclose = function() {
-    self.destroy()
-  }
+  req.on('response', function(res) {
+    if (res.statusCode !== 200) return res.pipe(concat(onerror))
+    dup.setReadable(res.pipe(parse(ondata)))
+  })
 
-  var onend = function() {
-    self.push(null)
-  }
+  req.on('close', function() {
+    dup.destroy()
+  })
 
-  var onfinish = function() {
-    request.end()
-  }
-
-  var onreadable = function() {
-    if (self._reading) self._read()
-  }
-
-  var onresponse = function(response) {
-    if (response.statusCode !== 200) return response.pipe(concat(onerror))
-
-    self._response = response
-      .on('readable', onreadable)
-      .on('end', onend)
-  }
-
-  request
-    .on('drain', ondrain)
-    .on('error', onerror)
-    .on('close', onclose)
-    .on('response', onresponse)
-
-  this._reading = false
-  this._response = null
-  this._request = request
-  this._destroyed = false
-  this._ondrain = null
-
-  this.on('finish', onfinish)
+  return dup
 }
 
-util.inherits(Build, stream.Duplex)
-
-Build.prototype.destroy = function(err) {
-  if (this._destroyed) return
-  this._destroyed = true
-  if (err) this.emit('error', err)
-  this._request.abort()
-  this.emit('close')
-}
-
-Build.prototype._write = function(data, enc, cb) {
-  if (this._request.write(data) !== false) return cb()
-  this._ondrain = cb
-}
-
-Build.prototype._read = function() {
-  this._reading = true
-
-  if (!this._response) return
-  var data = this._response.read()
-  if (!data) return
-
-  this._reading = false
-
-  try {
-    data = JSON.parse(data.toString())
-  } catch (err) {
-    return this.destroy(err)
-  }
-
-  if (data.error) return this.destroy(new Error(data.error.trim()))
-  this.push(data.stream)
-}
-
-module.exports = Build
+module.exports = build
