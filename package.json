@@ -7,7 +7,7 @@
     "docker-build": "cli.js"
   },
   "dependencies": {
-    "docker-remote-api": "^1.1.0",
+    "docker-remote-api": "^2.0.1",
     "duplexify": "^1.1.0",
     "minimist": "^0.1.0",
     "tar-fs": "^0.3.3",

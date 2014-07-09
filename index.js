@@ -15,9 +15,9 @@ var build = function(remote, opts) {
 
   var req = request.post('/build', {
     qs: qs,
-    registry: opts.registry,
     headers: {
-      'Content-Type': 'application/tar'
+      'Content-Type': 'application/tar',
+      'X-Registry-Config': opts.registry
     }
   }, function(err, res) {
     if (err) return dup.destroy(err)
