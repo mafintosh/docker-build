@@ -15,7 +15,7 @@ var build = require('docker-build')
 var fs = require('fs')
 
 fs.createReadStream('a-tar-file-with-a-dockerfile.tar')
-  .pipe(build())
+  .pipe(build('my-new-image'))
   .pipe(process.stdout)
 ```
 
