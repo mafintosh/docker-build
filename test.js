@@ -29,10 +29,10 @@ var server = http.createServer(function(req, res) { // fakish docker thing
 server.listen(0, function() {
   server.unref()
 
-  var remote = ':'+server.address().port
+  var host = ':'+server.address().port
 
   tape('output', function(t) {
-    var img = build(remote)
+    var img = build('test', {host:host})
 
     img.write('i am a tar file')
     img.end()
@@ -44,8 +44,9 @@ server.listen(0, function() {
   })
 
   tape('parse error', function(t) {
-    var img = build(remote, {
-      tag: 'parse-error'
+    var img = build('test', {
+      tag: 'parse-error',
+      host: host
     })
 
     img.write('i am a tar file')
@@ -61,8 +62,9 @@ server.listen(0, function() {
   tape('stream error', function(t) {
     t.plan(2)
 
-    var img = build(remote, {
-      tag: 'stream-error'
+    var img = build('test', {
+      tag: 'stream-error',
+      host: host
     })
 
     img.write('i am a tar file')
