@@ -15,7 +15,7 @@ var build = require('docker-build')
 var fs = require('fs')
 
 fs.createReadStream('a-tar-file-with-a-dockerfile.tar')
-  .pipe(build('localhost:2375'))
+  .pipe(build())
   .pipe(process.stdout)
 ```
 
@@ -25,32 +25,30 @@ and pipe the build output to stdout using docker running locally on port 2375.
 ## API
 
 ``` js
-var stream = build(remote, options)
+var stream = build(tag, [options])
 ```
-
-Where `remote` is a an address to docker - i.e. `localhost:2375` or `192.168.1.3:2375`. Defaults to `$DOCKER_HOST` or `localhost:2375`.
 
 `options` can contain the following:
 
 ``` js
 {
-  tag: 'tag-the-image-using-this-tag',
-  cache: true,    // whether or not to use docker fs cache (defaults to true)
-  quiet: false,   // be quiet - defaults to false,
-  registry: conf  // add a registry config
+  host: '/var/run/docker.sock', // host to docker
+  cache: true, // whether or not to use docker fs cache (defaults to true)
+  quiet: false, // be quiet - defaults to false,
+  registry: conf // add a registry config
 }
 ```
 
 ## CLI
 
-There is a command line too available as well (similar to `docker build`)
+There is a command line too available as well
 
 ```
 $ npm install -g docker-build
 $ docker-build --help
 ```
 
-Running `docker-build` will build current working directory
+Running `docker-build some-image-tag` will build current working directory
 
 ## License
 
