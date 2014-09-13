@@ -9,7 +9,7 @@ var build = function(tag, opts) {
   var request = opts.request || docker(opts.host)
 
   var qs = {}
-  qs.t = opts.tag
+  qs.t = tag
 
   if (opts.cache === false) qs.nocache = 'true'
   if (opts.quiet) qs.q = 'true'
