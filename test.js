@@ -44,8 +44,7 @@ server.listen(0, function() {
   })
 
   tape('parse error', function(t) {
-    var img = build('test', {
-      tag: 'parse-error',
+    var img = build('parse-error', {
       host: host
     })
 
@@ -62,8 +61,7 @@ server.listen(0, function() {
   tape('stream error', function(t) {
     t.plan(2)
 
-    var img = build('test', {
-      tag: 'stream-error',
+    var img = build('stream-error', {
       host: host
     })
 
