@@ -5,6 +5,15 @@ var minimist = require('minimist')
 var tstream = require('tar-stream')
 var tar = require('tar-fs')
 var concat = require('concat-stream')
+var ignore = require('ignore-file')
+
+var join = function(a, b) {
+  if (!a) return b
+  if (!b) return a
+  return function(filename) {
+    return a(filename) || b(filename)
+  }
+}
 
 var argv = minimist(process.argv, {
   boolean: ['cache', 'version'],
@@ -34,7 +43,8 @@ if (argv.help || !tag) {
     '  --host,    -H   [docker-host]\n'+
     '  --quiet,   -q\n'+
     '  --version, -v\n'+
-    '  --no-cache\n'
+    '  --no-cache\n'+
+    '  --no-ignore\n'
   )
   process.exit(1)
 }
@@ -51,7 +61,11 @@ var opts = {
 }
 
 var input = function() {
-  if (path !== '-') return tar.pack(path)
+  if (path !== '-') {
+    var filter = ignore.sync('.dockerignore') || join(ignore.compile('.git'), ignore.sync('.gitignore'))
+    if (argv.ignore === false) filter = null
+    return tar.pack(path, {filter:filter})
+  }
 
   var pack = tstream.pack()
 
