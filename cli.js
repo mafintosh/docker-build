@@ -64,7 +64,7 @@ var input = function() {
   if (path !== '-') {
     var filter = ignore.sync('.dockerignore') || join(ignore.compile('.git'), ignore.sync('.gitignore'))
     if (argv.ignore === false) filter = null
-    return tar.pack(path, {filter:filter})
+    return tar.pack(path, {ignore:filter})
   }
 
   var pack = tstream.pack()
