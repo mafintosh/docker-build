@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "concat-stream": "^1.4.6",
-    "docker-remote-api": "^4.3.0",
+    "docker-remote-api": "^4.4.0",
     "duplexify": "^3.2.0",
     "ignore-file": "^1.1.2",
     "minimist": "^1.1.0",
