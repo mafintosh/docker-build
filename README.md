@@ -35,7 +35,8 @@ var stream = build(tag, [options])
   host: '/var/run/docker.sock', // host to docker
   cache: true, // whether or not to use docker fs cache (defaults to true)
   quiet: false, // be quiet - defaults to false,
-  registry: conf // add a registry config
+  registry: conf, // add a registry config
+  buildOptions: {} // An object of docker remote api options, `t` will always be overwritten by `tag`
 }
 ```
 

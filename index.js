@@ -8,7 +8,7 @@ var build = function(tag, opts) {
   var dup = duplexify()
   var request = opts.request || docker(opts.host)
 
-  var qs = {}
+  var qs = opts.buildOptions || {}
   qs.t = tag
 
   if (opts.cache === false) qs.nocache = 'true'
