@@ -22,7 +22,7 @@ var build = function(tag, opts) {
 
   var post = request.post('/build', {
     qs: qs,
-    version: opts.version,
+    version: opts.version || 'v1.15',
     headers: {
       'Content-Type': 'application/tar',
       'X-Registry-Config': opts.registry
