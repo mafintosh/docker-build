@@ -35,7 +35,9 @@ var stream = build(tag, [options])
   host: '/var/run/docker.sock', // host to docker
   cache: true, // whether or not to use docker fs cache (defaults to true)
   quiet: false, // be quiet - defaults to false,
-  registry: conf // add a registry config
+  registry: conf, // add a registry config
+  remove: true, // automatically removes intermediate contaners (defaults to true)
+  forceremove: false // always remove intermediate containers, even if the build fails (defaults to false)
 }
 ```
 

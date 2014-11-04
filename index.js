@@ -13,6 +13,8 @@ var build = function(tag, opts) {
 
   if (opts.cache === false) qs.nocache = 'true'
   if (opts.quiet) qs.q = 'true'
+  if (opts.remove === false) qs.rm = 'false'
+  if (opts.forceremove) qs.forcerm = 'true'
 
   var onerror = function(err) {
     dup.destroy(err || new Error('Premature close'))
