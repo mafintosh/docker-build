@@ -32,6 +32,7 @@ var stream = build(tag, [options])
 
 ``` js
 {
+  version: 'v1.15', // API version string to use (defaults to 'v1.15')
   host: '/var/run/docker.sock', // host to docker
   cache: true, // whether or not to use docker fs cache (defaults to true)
   quiet: false, // be quiet - defaults to false,
@@ -40,7 +41,7 @@ var stream = build(tag, [options])
   forceremove: false, // always remove intermediate containers, even if the build fails (defaults to false)
   buildArgs: { foo: 'bar' }, // Set build-time variables
   cpuShares: 0, // CPU shares (relative weight)
-  cgroupParent: undefined, // Optional parent cgroup for the container
+  cgroupParent: '/cgroup-parent/foobar', // Optional parent cgroup for the container
   cpuPeriod: 0, // Limit the CPU CFS (Completely Fair Scheduler) period
   cpuQuota: 0, // Limit the CPU CFS (Completely Fair Scheduler) quota
   cpusetCpus: 0, // CPUs in which to allow execution (0-3, 0,1)
