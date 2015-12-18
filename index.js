@@ -15,6 +15,18 @@ var build = function(tag, opts) {
   if (opts.quiet) qs.q = 'true'
   if (opts.remove === false) qs.rm = 'false'
   if (opts.forceremove) qs.forcerm = 'true'
+  if (opts.buildArgs)  qs.buildargs = JSON.stringify(opts.buildArgs)
+  if (opts.cpuShares) qs.cpushares = opts.cpuShares
+  if (opts.cgroupParent) qs.cgroupparent = opts.cgroupParent
+  if (opts.cpuPeriod) qs.cpuperiod = opts.cpuPeriod
+  if (opts.cpuQuota) qs.cpuquota = opts.cpuQuota
+  if (opts.cpusetCpus) qs.cpusetcpus = opts.cpusetCpus
+  if (opts.cpusetMems) qs.cpusetmems = opts.cpusetMems
+  if (opts.dockerfile) qs.dockerfile = opts.dockerfile
+  if (opts.memory) qs.memory = opts.memory
+  if (opts.memorySwap) qs.memswap = opts.memorySwap
+  if (opts.pull) qs.pull = '1'
+  if (opts.ulimits) qs.ulimits = JSON.stringify(opts.ulimits)
 
   var onerror = function(err) {
     dup.destroy(err || new Error('Premature close'))
