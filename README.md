@@ -37,7 +37,8 @@ var stream = build(tag, [options])
   quiet: false, // be quiet - defaults to false,
   registry: conf, // add a registry config
   remove: true, // automatically removes intermediate contaners (defaults to true)
-  forceremove: false // always remove intermediate containers, even if the build fails (defaults to false)
+  forceremove: false, // always remove intermediate containers, even if the build fails (defaults to false)
+  version: 'v1.15' // docker api version (defaults to 'v1.15')
 }
 ```
 

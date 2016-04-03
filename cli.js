@@ -24,7 +24,8 @@ var argv = minimist(process.argv, {
     host: 'H'
   },
   default: {
-    cache: true
+    cache: true,
+    'api-version': 'v1.15'
   }
 })
 
@@ -40,9 +41,10 @@ if (argv.help || !tag) {
   console.error(
     'Usage: docker-build [tag] [path?] [options]\n'+
     '\n'+
-    '  --host,    -H   [docker-host]\n'+
-    '  --quiet,   -q\n'+
-    '  --version, -v\n'+
+    '  --host,        -H   [docker-host]\n'+
+    '  --quiet,       -q\n'+
+    '  --version,     -v\n'+
+    '  --api-version       [api version (v1.15)]\n'+
     '  --no-cache\n'+
     '  --no-ignore\n'
   )
@@ -57,7 +59,8 @@ var onerror = function(err) {
 var opts = {
   host: argv.host,
   cache: argv.cache,
-  quiet: argv.quiet
+  quiet: argv.quiet,
+  version: argv['api-version']
 }
 
 var input = function() {
