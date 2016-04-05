@@ -25,7 +25,7 @@ var argv = minimist(process.argv, {
   },
   default: {
     cache: true,
-    'api-version': 'v1.15'
+    'api-version': 'v1.22'
   }
 })
 
@@ -44,7 +44,7 @@ if (argv.help || !tag) {
     '  --host,        -H   [docker-host]\n'+
     '  --quiet,       -q\n'+
     '  --version,     -v\n'+
-    '  --api-version       [api version (v1.15)]\n'+
+    '  --api-version       [api version (v1.22)]\n'+
     '  --no-cache\n'+
     '  --no-ignore\n'
   )

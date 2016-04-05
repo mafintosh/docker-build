@@ -38,9 +38,11 @@ var stream = build(tag, [options])
   registry: conf, // add a registry config
   remove: true, // automatically removes intermediate contaners (defaults to true)
   forceremove: false, // always remove intermediate containers, even if the build fails (defaults to false)
-  version: 'v1.15' // docker api version (defaults to 'v1.15')
+  version: 'v1.22' // docker api version (defaults to 'v1.22')
 }
 ```
+
+**Note:** The `version` property corresponds to the [`Docker Remote API`](https://docs.docker.com/engine/reference/api/docker_remote_api/) version.
 
 ## CLI
 
